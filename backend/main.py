@@ -77,7 +77,7 @@ async def upload_file(file: UploadFile = File(...)):
 
     try:
         if file_extension.endswith(".csv"):
-            df = pd.read_csv(file_path)
+            df = pd.read_csv(file_path, sep=None, engine="python")
         else:
             df = pd.read_excel(file_path)
 
@@ -143,7 +143,7 @@ async def train_model(
 
     try:
         if last_uploaded_file_path.lower().endswith(".csv"):
-            df = pd.read_csv(last_uploaded_file_path)
+            df = pd.read_csv(last_uploaded_file_path, sep=None, engine="python")
         else:
             df = pd.read_excel(last_uploaded_file_path)
 

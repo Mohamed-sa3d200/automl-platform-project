@@ -23,14 +23,24 @@
                     <span class="icon">📁</span>
                     <span>Step 1: Upload Dataset</span>
                 </div>
-                <div class="upload-area" id="uploadArea">
-                    <div class="upload-icon">📤</div>
-                    <p>Drag & drop or click to upload</p>
-                    <p style="font-size: 12px; color: #666; margin-top: 10px;">Supports .CSV or .XLSX files</p>
-                    <input type="file" id="fileInput" accept=".csv,.xlsx" class="file-input">
-                </div>
-                <div id="fileInfo" class="file-info"></div>
+
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📤</div>
+                <p>Choose dataset file</p>
+                <p style="font-size: 12px; color: #666; margin-top: 10px;">
+                    Supports .CSV or .XLSX files
+                </p>
             </div>
+
+            <div class="upload-controls">
+                <input type="file" id="fileInput" accept=".csv,.xlsx">
+
+            <button type="button" id="uploadBtn" class="upload-btn">
+                Upload File
+            </button>
+            </div>
+
+            <div id="fileInfo" class="file-info"></div>
 
             <!-- Data Preview -->
             <div id="previewContainer" class="preview-container">
@@ -47,6 +57,7 @@
                     <span class="icon">🎯</span>
                     <span>Step 2: Select ML Task</span>
                 </div>
+
                 <select id="taskSelect">
                     <option value="">-- Select ML Task --</option>
                     <option value="classification">Classification</option>
@@ -55,7 +66,10 @@
                 </select>
 
                 <div id="targetSelector" class="target-selector">
-                    <label style="display: block; margin-bottom: 10px; font-weight: bold;">Select Target Column:</label>
+                    <label style="display: block; margin-bottom: 10px; font-weight: bold;">
+                        Select Target Column:
+                    </label>
+
                     <select id="targetSelect">
                         <option value="">-- Select Target --</option>
                     </select>
@@ -63,12 +77,16 @@
             </div>
 
             <!-- Train Button -->
-            <button id="trainBtn" class="train-btn" disabled>🚀 Train Model</button>
+            <button id="trainBtn" class="train-btn" disabled>
+                🚀 Train Model
+            </button>
 
             <!-- Loading Spinner -->
             <div id="loading" class="loading">
                 <div class="spinner"></div>
-                <p style="margin-top: 10px;">Training model... This may take a few moments</p>
+                <p style="margin-top: 10px;">
+                    Training model... This may take a few moments
+                </p>
             </div>
 
             <!-- Results Section -->
@@ -77,8 +95,12 @@
                     <span class="icon">📊</span>
                     <span>Step 3: Results</span>
                 </div>
+
                 <div id="results"></div>
-                <button id="saveModelBtn" class="save-btn">💾 Save Model</button>
+
+                <button id="saveModelBtn" class="save-btn">
+                    💾 Save Model
+                </button>
             </div>
         </div>
     </div>

@@ -62,13 +62,12 @@ body {
     font-size: 1.2em;
 }
 
-/* Form Elements */
+/* Upload Area */
 .upload-area {
     border: 2px dashed #667eea;
     border-radius: 10px;
     padding: 40px;
     text-align: center;
-    cursor: pointer;
     transition: all 0.3s ease;
     background: #faf9ff;
 }
@@ -83,15 +82,35 @@ body {
     background: #edeaff;
 }
 
-.file-input {
-    display: none;
-}
-
 .upload-icon {
     font-size: 48px;
     margin-bottom: 10px;
 }
 
+#fileInput {
+    margin-top: 15px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.upload-btn {
+    margin-top: 15px;
+    padding: 10px 25px;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    background: #667eea;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.upload-btn:hover {
+    background: #5a6fd6;
+}
+
+/* File Info */
 .file-info {
     margin-top: 15px;
     padding: 10px;
@@ -105,7 +124,8 @@ body {
 }
 
 /* Dropdowns and Selects */
-select, button {
+select,
+button {
     padding: 12px 20px;
     border-radius: 8px;
     border: 2px solid #e0e0e0;
@@ -133,7 +153,7 @@ select:focus {
     display: block;
 }
 
-/* Button */
+/* Train Button */
 .train-btn {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -173,7 +193,8 @@ select:focus {
     font-size: 14px;
 }
 
-.preview-table th, .preview-table td {
+.preview-table th,
+.preview-table td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
@@ -195,7 +216,7 @@ select:focus {
 
 .metrics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
     margin-bottom: 20px;
 }
@@ -205,13 +226,16 @@ select:focus {
     color: white;
     padding: 20px;
     border-radius: 10px;
-    text-align: center;
+    text-align: left;
 }
 
 .metric-card h4 {
-    font-size: 14px;
-    opacity: 0.9;
-    margin-bottom: 10px;
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.metric-card p {
+    margin-bottom: 8px;
 }
 
 .metric-card .value {
@@ -219,17 +243,43 @@ select:focus {
     font-weight: bold;
 }
 
-.confusion-matrix {
-    background: #f5f5f5;
+.best-model-card {
+    background: #28a745;
+    color: white;
     padding: 20px;
     border-radius: 10px;
-    margin-top: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.best-model-card h4 {
+    margin-bottom: 10px;
+}
+
+.best-model-card .value {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Confusion Matrix */
+.confusion-matrix {
+    background: rgba(255,255,255,0.15);
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
     overflow-x: auto;
+}
+
+.confusion-matrix h4 {
+    margin-bottom: 10px;
 }
 
 .confusion-matrix table {
     margin: 0 auto;
     border-collapse: collapse;
+    background: white;
+    color: #333;
 }
 
 .confusion-matrix td {
@@ -239,6 +289,7 @@ select:focus {
     min-width: 60px;
 }
 
+/* Save Button */
 .save-btn {
     background: #28a745;
     color: white;
@@ -276,8 +327,12 @@ select:focus {
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 /* Alert */
@@ -302,4 +357,29 @@ select:focus {
     background: #d4edda;
     color: #155724;
     border: 1px solid #c3e6cb;
+}
+.upload-controls {
+    text-align: center;
+    margin-top: 15px;
+}
+
+#fileInput {
+    display: block;
+    margin: 10px auto;
+}
+
+.upload-btn {
+    margin-top: 10px;
+    padding: 10px 25px;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    background: #667eea;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.upload-btn:hover {
+    background: #5a6fd6;
 }
