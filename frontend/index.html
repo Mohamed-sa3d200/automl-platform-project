@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AutoML Platform — Upload your dataset, choose a task, and get the best machine learning model automatically." />
+  <title>AutoML Platform — Automated Machine Learning</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="spinner"></div>
+    <div id="loadingText" class="loading-text">Processing…</div>
+  </div>
+
+  <div class="app-container">
+
+    <!-- ── Header ── -->
+    <header class="app-header">
+      <span class="app-header__icon">🤖</span>
+      <h1 class="app-header__title">AutoML Platform</h1>
+      <p class="app-header__subtitle">Upload your dataset, pick a task, and let us find the best model for you — automatically.</p>
+    </header>
+
+    <!-- ── Global Error ── -->
+    <div id="globalAlert" class="hidden"></div>
+
+    <!-- ── Step 1: Upload ── -->
+    <section class="card" id="uploadCard" style="animation-delay:0s">
+      <div class="card__title">
+        <span class="step-badge">1</span>
+        <span>Upload Dataset</span>
+      </div>
+      <div class="upload-zone" id="uploadZone">
+        <span class="upload-zone__icon">📂</span>
+        <div class="upload-zone__text">Drag &amp; drop your file here or <strong>click to browse</strong></div>
+        <div class="upload-zone__hint">Supports .csv and .xlsx files</div>
+        <input type="file" id="fileInput" accept=".csv,.xlsx" />
+        <div id="fileSelectedName" class="file-selected-name hidden"></div>
+      </div>
+    </section>
+
+    <!-- ── Step 2: Data Preview ── -->
+    <section class="card hidden" id="previewCard" style="animation-delay:0.1s">
+      <div class="card__title">
+        <span class="step-badge">2</span>
+        <span>Data Preview</span>
+      </div>
+      <div class="info-grid" id="dataInfoGrid">
+        <!-- Filled by JS -->
+      </div>
+      <div>
+        <div class="form-label">Columns</div>
+        <div class="columns-list" id="columnsList">
+          <!-- Filled by JS -->
+        </div>
+      </div>
+      <div class="table-wrapper" id="previewTableWrapper">
+        <!-- Filled by JS -->
+      </div>
+    </section>
+
+    <!-- ── Step 3: Task Selection ── -->
+    <section class="card hidden" id="taskCard" style="animation-delay:0.2s">
+      <div class="card__title">
+        <span class="step-badge">3</span>
+        <span>Select Task</span>
+      </div>
+      <div class="radio-group" id="taskRadioGroup">
+        <div class="radio-card">
+          <input type="radio" id="taskClassification" name="taskType" value="classification" />
+          <label for="taskClassification" class="radio-card__label">
+            <span class="radio-card__icon">🏷️</span>
+            <span class="radio-card__text">Classification</span>
+            <span class="radio-card__desc">Predict categories</span>
+          </label>
+        </div>
+        <div class="radio-card">
+          <input type="radio" id="taskRegression" name="taskType" value="regression" />
+          <label for="taskRegression" class="radio-card__label">
+            <span class="radio-card__icon">📈</span>
+            <span class="radio-card__text">Regression</span>
+            <span class="radio-card__desc">Predict numbers</span>
+          </label>
+        </div>
+        <div class="radio-card">
+          <input type="radio" id="taskClustering" name="taskType" value="clustering" />
+          <label for="taskClustering" class="radio-card__label">
+            <span class="radio-card__icon">🔵</span>
+            <span class="radio-card__text">Clustering</span>
+            <span class="radio-card__desc">Group similar data</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Target Column (appears for classification/regression) -->
+      <div id="targetRow" class="target-row hidden">
+        <div class="form-group">
+          <label class="form-label" for="targetSelect">Target Column</label>
+          <select id="targetSelect" class="form-select">
+            <option value="">— select target column —</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Step 4: Train ── -->
+    <section class="card hidden" id="trainCard" style="animation-delay:0.3s">
+      <div class="card__title">
+        <span class="step-badge">4</span>
+        <span>Train Model</span>
+      </div>
+      <button id="trainBtn" class="btn btn-primary btn-full" disabled>
+        🚀 Start Training
+      </button>
+    </section>
+
+    <!-- ── Step 5: Results ── -->
+    <section class="card hidden" id="resultsCard" style="animation-delay:0.4s">
+      <div class="card__title">
+        <span class="step-badge">5</span>
+        <span>Results Report</span>
+      </div>
+
+      <!-- Best model summary -->
+      <div class="results-header" id="resultsHeader">
+        <!-- Filled by JS -->
+      </div>
+
+      <!-- Key metrics -->
+      <div class="metric-cards" id="metricCards">
+        <!-- Filled by JS -->
+      </div>
+
+      <!-- Model comparison table -->
+      <div class="table-wrapper" id="modelComparisonWrapper">
+        <!-- Filled by JS -->
+      </div>
+
+      <!-- Confusion matrix (classification only) -->
+      <div id="confusionMatrixSection" class="confusion-matrix-wrapper hidden">
+        <!-- Filled by JS -->
+      </div>
+
+      <!-- Download button -->
+      <div class="section-divider" style="margin:1.25rem 0"></div>
+      <div class="download-section">
+        <p>Your trained model is ready for download 🎉</p>
+        <a id="downloadBtn" class="btn btn-success" href="#" download>
+          ⬇️ Download Model
+        </a>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

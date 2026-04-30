@@ -57,6 +57,9 @@ async def upload_file(file: UploadFile = File(...)):
     - first 5 rows preview
     """
 
+    import time
+    start_time = time.time()
+    
     global last_uploaded_file_path
 
     filename = file.filename
@@ -70,16 +73,23 @@ async def upload_file(file: UploadFile = File(...)):
 
     file_path = os.path.join(UPLOAD_DIR, filename)
 
+    print(f"--> Saving file: {filename}...")
+    save_start = time.time()
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
+    print(f"    Done saving in {time.time() - save_start:.2f} seconds.")
 
     last_uploaded_file_path = file_path
 
     try:
+        print(f"--> Reading data into Pandas...")
+        read_start = time.time()
         if file_extension.endswith(".csv"):
             df = pd.read_csv(file_path)
         else:
+            # Excel is naturally slower
             df = pd.read_excel(file_path)
+        print(f"    Done reading in {time.time() - read_start:.2f} seconds.")
 
     except Exception as e:
         raise HTTPException(
@@ -87,6 +97,7 @@ async def upload_file(file: UploadFile = File(...)):
             detail=f"Error reading file: {str(e)}"
         )
 
+    print(f"--> Total Upload Time: {time.time() - start_time:.2f} seconds.\n")
     return {
         "status": "success",
         "message": "File uploaded successfully.",
