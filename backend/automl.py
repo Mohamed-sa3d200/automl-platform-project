@@ -135,21 +135,49 @@ def train_automl(df, task_type, target_column=None):
     # --------------------------------------------------
     elif task_type == "clustering":
 
-        for model_name, model in models.items():
+        preprocessor = preprocessor_obj.build_preprocessor(X)
+        X_processed = preprocessor.fit_transform(X)
 
-            preprocessor = preprocessor_obj.build_preprocessor(X)
+        import numpy as np
+        if X_processed.shape[0] > 5000:
+            np.random.seed(42)
+            indices = np.random.choice(X_processed.shape[0], 5000, replace=False)
+            X_sample = X_processed[indices]
+        else:
+            X_sample = X_processed
+
+        max_k = min(10, X_sample.shape[0] - 1)
+        if max_k < 2:
+            max_k = 2
+
+        for model_name, model in models.items():
+            if model_name == "Agglomerative Clustering" and X_processed.shape[0] > 5000:
+                continue
+
+            best_k = 2
+            best_model_score = -1.0
+
+            for k in range(2, max_k + 1):
+                model.set_params(n_clusters=k)
+                sample_labels = model.fit_predict(X_sample)
+                
+                score = evaluate_clustering(X_sample, sample_labels)["silhouette_score"]
+                
+                if score > best_model_score:
+                    best_model_score = score
+                    best_k = k
+
+            model.set_params(n_clusters=best_k)
+            full_labels = model.fit_predict(X_processed)
 
             pipeline = SklearnPipeline([
-                ("preprocessor", preprocessor),
+                ("preprocessor", preprocessor_obj.build_preprocessor(X)),
                 ("model", model)
             ])
+            pipeline.fit(X)
 
-            X_processed = preprocessor.fit_transform(X)
-
-            labels = model.fit_predict(X_processed)
-
-            metrics = evaluate_clustering(X_processed, labels)
-
+            metrics = evaluate_clustering(X_processed, full_labels)
+            metrics["optimal_clusters"] = best_k
             results[model_name] = metrics
 
             current_score = get_main_score(task_type, metrics)

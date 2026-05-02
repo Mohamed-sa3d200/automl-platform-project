@@ -65,16 +65,21 @@ class DataPreprocessor:
 
         for col in df.columns:
             if df[col].dtype == "object":
+                sample = df[col].dropna().head(50)
+                if len(sample) == 0:
+                    continue
                 try:
-                    converted_col = pd.to_datetime(df[col], errors="raise")
+                    # Test on small sample first to avoid slow dateutil fallback
+                    pd.to_datetime(sample, errors="raise")
+                    
+                    converted_col = pd.to_datetime(df[col], errors="coerce")
 
                     # If conversion works, create date features
-                    df[col + "_year"] = converted_col.dt.year
-                    df[col + "_month"] = converted_col.dt.month
-                    df[col + "_day"] = converted_col.dt.day
-
-                    # Drop original datetime column
-                    df = df.drop(columns=[col])
+                    if converted_col.notnull().any():
+                        df[col + "_year"] = converted_col.dt.year
+                        df[col + "_month"] = converted_col.dt.month
+                        df[col + "_day"] = converted_col.dt.day
+                        df = df.drop(columns=[col])
 
                 except Exception:
                     # If column is not datetime, keep it as it is

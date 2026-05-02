@@ -356,6 +356,7 @@
             renderMetricCard("MSE", bestMetrics.mse);
             renderMetricCard("R² Score", bestMetrics.r2_score);
         } else if (taskType === "clustering") {
+            renderMetricCard("Optimal Clusters", bestMetrics.optimal_clusters);
             renderMetricCard("Silhouette Score", bestMetrics.silhouette_score);
         }
 
@@ -398,8 +399,8 @@
             headerCols = ["Model", "MAE", "MSE", "R² Score"];
             metricKeys = ["mae", "mse", "r2_score"];
         } else {
-            headerCols = ["Model", "Silhouette Score"];
-            metricKeys = ["silhouette_score"];
+            headerCols = ["Model", "Optimal Clusters", "Silhouette Score"];
+            metricKeys = ["optimal_clusters", "silhouette_score"];
         }
 
         let thead = headerCols.map((h) => `<th>${h}</th>`).join("");

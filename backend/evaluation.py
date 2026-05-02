@@ -73,7 +73,7 @@ def evaluate_clustering(X_processed, labels):
 
     return {
         "silhouette_score": float(
-            silhouette_score(X_processed, labels)
+            silhouette_score(X_processed, labels, sample_size=5000, random_state=42)
         )
     }
 
