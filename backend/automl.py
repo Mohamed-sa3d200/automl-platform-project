@@ -1,10 +1,14 @@
 import os
 import joblib
-
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline as SklearnPipeline
 from imblearn.pipeline import Pipeline as ImbPipeline
 from imblearn.over_sampling import SMOTE
+import numpy as np
+
+#  Add these two missing imports
+from sklearn.cluster import KMeans, AgglomerativeClustering
+from sklearn.metrics import silhouette_score
 
 from backend.preprocessing import DataPreprocessor
 from backend.models import get_models
@@ -14,7 +18,23 @@ from backend.evaluation import (
     evaluate_clustering,
     get_main_score
 )
+# ==========================================================================
+def find_best_k_silhouette(X, k_min=2, k_max=10, random_state=42):
+        k_max = min(k_max, len(X) - 1)
+        best_k = k_min
+        best_score = -1
+        for k in range(k_min, k_max + 1):
+            model = KMeans(n_clusters=k, random_state=random_state, n_init="auto")
+            labels = model.fit_predict(X)
+            if len(set(labels)) < 2:
+                continue
+            score = silhouette_score(X, labels)
+            if score > best_score:
+                best_score = score
+                best_k = k
+        return best_k
 
+# =============================================================================
 
 def train_automl(df, task_type, target_column=None):
     """
@@ -97,6 +117,7 @@ def train_automl(df, task_type, target_column=None):
     # --------------------------------------------------
     # Regression
     # --------------------------------------------------
+
     elif task_type == "regression":
 
         X_train, X_test, y_train, y_test = train_test_split(
@@ -133,22 +154,33 @@ def train_automl(df, task_type, target_column=None):
     # --------------------------------------------------
     # Clustering
     # --------------------------------------------------
-    elif task_type == "clustering":
+# =====================================================================================
 
+    elif task_type == "clustering":
         for model_name, model in models.items():
 
             preprocessor = preprocessor_obj.build_preprocessor(X)
+            X_processed = preprocessor.fit_transform(X)
+
+            # ✅ Dynamically find best k using Silhouette Score
+            best_k = find_best_k_silhouette(X_processed)
+
+            # ✅ Instantiate the correct model with best_k
+            if model_name == "KMeans":
+                model = KMeans(n_clusters=best_k, random_state=42, n_init="auto")
+            elif model_name == "Agglomerative Clustering":
+                model = AgglomerativeClustering(n_clusters=best_k)
 
             pipeline = SklearnPipeline([
                 ("preprocessor", preprocessor),
                 ("model", model)
             ])
 
-            X_processed = preprocessor.fit_transform(X)
-
             labels = model.fit_predict(X_processed)
-
             metrics = evaluate_clustering(X_processed, labels)
+
+            # ✅ Store best_k inside metrics so it's visible in your API response
+            metrics["best_k"] = best_k
 
             results[model_name] = metrics
 
@@ -158,6 +190,32 @@ def train_automl(df, task_type, target_column=None):
                 best_score = current_score
                 best_model_name = model_name
                 best_pipeline = pipeline
+# ========================================================================================
+    # elif task_type == "clustering":
+
+    #     for model_name, model in models.items():
+
+    #         preprocessor = preprocessor_obj.build_preprocessor(X)
+
+    #         pipeline = SklearnPipeline([
+    #             ("preprocessor", preprocessor),
+    #             ("model", model)
+    #         ])
+
+    #         X_processed = preprocessor.fit_transform(X)
+
+    #         labels = model.fit_predict(X_processed)
+
+    #         metrics = evaluate_clustering(X_processed, labels)
+
+    #         results[model_name] = metrics
+
+    #         current_score = get_main_score(task_type, metrics)
+
+    #         if best_score is None or current_score > best_score:
+    #             best_score = current_score
+    #             best_model_name = model_name
+    #             best_pipeline = pipeline
 
     else:
         raise ValueError(

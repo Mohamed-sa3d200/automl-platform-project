@@ -35,19 +35,26 @@ def get_models(task_type):
                 random_state=42
             )
         }
-
+    
+# ====================================================================================
     elif task_type == "clustering":
         return {
-            "KMeans": KMeans(
-                n_clusters=3,
-                random_state=42,
-                n_init=10
-            ),
-            "Agglomerative Clustering": AgglomerativeClustering(
-                n_clusters=3
-            )
+            "KMeans": None,  # k will be selected dynamically in automl.py
+            "Agglomerative Clustering": None
         }
 
+    # elif task_type == "clustering":
+    #     return {
+    #         "KMeans": KMeans(
+    #             n_clusters=3,
+    #             random_state=42,
+    #             n_init=10
+    #         ),
+    #         "Agglomerative Clustering": AgglomerativeClustering(
+    #             n_clusters=3
+    #         )
+    #     }
+# ===================================================================================
     else:
         raise ValueError(
             "Invalid task type. Choose from: classification, regression, clustering."

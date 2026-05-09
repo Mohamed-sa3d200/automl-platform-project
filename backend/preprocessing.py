@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np  
 
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
@@ -125,9 +126,12 @@ class DataPreprocessor:
             return X, y
 
         elif task_type == "clustering":
-            X = df.copy()
-            y = None
-            return X, y
+                X = df.select_dtypes(include=["int64", "float64", "int32", "float32"]).copy()
+                y = None
+                return X, y
+            # X = df.copy()
+            # y = None
+            # return X, y
 
         else:
             raise ValueError(
@@ -149,14 +153,21 @@ class DataPreprocessor:
         - Missing values: most frequent
         - Encoding: OneHotEncoder
         """
-
         self.numeric_cols = X.select_dtypes(
-            include=["int64", "float64", "int32", "float32", "bool"]
+            include=["int64", "float64", "int32", "float32"]
         ).columns
 
         self.categorical_cols = X.select_dtypes(
-            include=["object", "category"]
+            include=["object", "category", "bool"]
         ).columns
+
+        # self.numeric_cols = X.select_dtypes(
+        #     include=["int64", "float64", "int32", "float32", "bool"]
+        # ).columns
+
+        # self.categorical_cols = X.select_dtypes(
+        #     include=["object", "category"]
+        # ).columns
 
         numeric_pipeline = Pipeline([
             (
